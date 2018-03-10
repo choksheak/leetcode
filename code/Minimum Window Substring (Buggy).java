@@ -1,3 +1,7 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeSet;
+
 public class Solution {
     public String minWindow(String s, String t) {
         // Form map of chars in t to count.
@@ -8,7 +12,7 @@ public class Solution {
             tChars.put(c, count != null ? count + 1 : 1);
         }
         
-        Map<Character, Integer> seenCount = new HashMap<>();
+        Map<Character, TreeSet<Integer>> seenCharIndexes = new HashMap<>();
         TreeSet<Integer> seenIndexes = new TreeSet<>();
         
         int minWinStart = 0;
@@ -22,22 +26,22 @@ public class Solution {
                 continue;
             }
             
-            Integer count0 = seenCount.get(c);
-            int count = (count0 != null) ? count0 + 1 : 1;
+            TreeSet<Integer> charIndexes = seenCharIndexes.get(c);
+            int count = (charIndexes != null) ? charIndexes.size() + 1 : 1;
             
             // If we have too many of the same char c, remove the first c within the current window.
             if (count > tChars.get(c)) {
-                for (int index = seenIndexes.first(); index < i; index++) {
-                    if (s.charAt(index) == c) {
-                        seenIndexes.remove(index);
-                        break;
-                    }
-                }
+            	int index = charIndexes.pollFirst();
+            	seenIndexes.remove(index);
             }
             else {
-                seenCount.put(c, count);
+            	if (charIndexes == null) {
+            		charIndexes = new TreeSet<Integer>();
+            		seenCharIndexes.put(c, charIndexes);
+            	}
             }
 
+            charIndexes.add(i);
             seenIndexes.add(i);
 
             if (seenIndexes.size() == t.length()) {
@@ -53,14 +57,14 @@ public class Solution {
 
                 // Remove char at start index from seenCount.
                 c = s.charAt(min);
-                seenCount.put(c, seenCount.get(c) - 1);
+                seenCharIndexes.get(c).pollFirst();
             }
         }
         
         return minWinEnd == -1 ? "" : s.substring(minWinStart, minWinEnd + 1);
     }
 
-    public static void main() {
+    public static void main(String[] args) {
         Solution s = new Solution();
         String answer = s.minWindow("aaaaaaaaaaaabbbbbcdd", "abcdd");
         System.out.println(answer);
