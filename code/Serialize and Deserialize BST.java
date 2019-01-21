@@ -57,6 +57,7 @@ public class SerializeDeserializeBst {
         }
         
         TreeNode node = new TreeNode(0);
+        boolean isNegative = false;
 
         while (index[0] < data.length()) {
             int c = data.charAt(index[0]++);
@@ -68,7 +69,15 @@ public class SerializeDeserializeBst {
                 node.right = deserialize(data, index);
                 break;
             }
+            if (c == '-') {
+                isNegative = true;
+                continue;
+            }
             node.val = (node.val * 10) + (c - '0');
+        }
+
+        if (isNegative) {
+            node.val = -node.val;
         }
 
         return node;
