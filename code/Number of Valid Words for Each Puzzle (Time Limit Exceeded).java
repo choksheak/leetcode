@@ -21,11 +21,11 @@ class Solution {
         List<Integer> counts = new ArrayList<>();
         for (String puzzle : puzzles) {
             int count = 0;
-            
+            int puzzleMask = getBitMask(puzzle);
+
             for (int mask : wordMasks) {
                 int firstCharMask = 1 << (puzzle.charAt(0) - 'a');
                 if ((mask & firstCharMask) != 0) {
-                    int puzzleMask = getBitMask(puzzle);
                     if ((puzzleMask & mask) == mask) {
                         count++;
                     }
