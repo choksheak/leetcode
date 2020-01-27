@@ -10,7 +10,12 @@ class Solution {
         }
         
         dictSet = new HashSet<>(wordDict);
+        initMinMaxWordLengths(wordDict);
         
+        return wordBreak(s);
+    }
+    
+    private void initMinMaxWordLengths(List<String> wordDict) {
         shortestWordLength = wordDict.get(0).length();
         longestWordLength = 0;
         
@@ -18,17 +23,15 @@ class Solution {
             shortestWordLength = Math.min(shortestWordLength, w.length());
             longestWordLength = Math.max(longestWordLength, w.length());
         }
-        
-        return wordBreak(s);
     }
     
     private List<String> wordBreak(String s) {
-        if (cache.containsKey(s)) {
-            return cache.get(s);
-        }
-
         if (s.length() == 0) {
             return Collections.singletonList("");
+        }
+
+        if (cache.containsKey(s)) {
+            return cache.get(s);
         }
 
         List<String> sentences = new ArrayList<>();
