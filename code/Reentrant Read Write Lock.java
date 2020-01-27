@@ -21,6 +21,9 @@ public class Main {
     }
 }
 
+/*
+Reference: http://tutorials.jenkov.com/java-concurrency/read-write-locks.html
+*/
 class ReentrantReadWriteLock {
     private final Map<Thread, Integer> readerThreads = new HashMap<>();
     private Thread writerThread = null;
